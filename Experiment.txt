@@ -1,0 +1,62 @@
+We conducted 4 distinct experiments for this assignment. The hypothesis, results and conclusion.
+
+Experiment 1
+Hypothesis
+Increasing the Size of training dataset will improve accuracy of trained model. O class with 10000 max updates and 0.01 epsilon
+
+Experiment Results
+ 
+Size of Training Data Set   Accuracy
+1000                        72.12
+5000                        73.10
+10000                       74.91
+15000                       74.98
+20000                       75.01
+
+Conclusion: This shows that an increase in the size of training dataset improves accuracy. 
+
+
+Experiment 2
+Hypothesis
+Changing a particular symbol does not affect accuracy of the model. (Using 1000 training samples for each symbol)
+Experiment Results
+ 
+Symbol  Accuracy
+O       72.08
+P       66.11
+W       87.89
+Q       72.74
+S       79.89
+ 
+
+Conclusion: Changing the symbols does affect the accuracy. We can see that SVM learns wavy and star symbols better than plus and square. Thus, the training symbol does affect the accuracy of the model.
+Hypothesis
+
+
+Experiment 3
+Increased distortion in input images leads to decrease in accuracy of the model.
+Without distortion accuracy:
+(We changed the tweakable parameters whereas the training data size was fixed to 1000)
+Experiment Results
+Conclusion: Introduction of distortions reduces the accuracy 
+
+
+Experiment 4
+Hypothesis
+Changing the value of ε affects the accuracy of the trained models.
+(The training data size is fixed to 1000 with max updates 10000 and O class.) Experiment Results
+Distortion  Accuracy
+Low         71.04
+Medium      65.24
+High        64.58
+ 
+
+ 
+ε value     Accuracy
+0.9         71.24
+0.5         71.24
+0.1         71.27
+0.05        71.28
+0.01        71.29
+
+Conclusion: This shows that accuracy of trained models does not depend on ε value
