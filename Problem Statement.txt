@@ -1,0 +1,43 @@
+Specifications:
+
+The program should contain:
+
+1.A dataset generator which can be used to generator variations of Zener Cards. Your submitted generator will be tested from the command line with a line of format:
+python zener_generator.py folder_name num_examples 
+The following is an example concrete invocation of your program:
+python zener_generator.py data 10000
+When run your program should output num_examples many 25x25 black-and-white png image files in the folder folder_name. The files should have file names of the form Num_ZenerCardLetter.png. For example, 1_O.png. The number 1 means it was the first example image generated. The second image would use the number 2, and so on. The letter O means the image in the file was supposed to be a O (circle). Other single letter codes for the remaining Zener Cards are:
+P - for Plus symbol
+W - for Waves
+Q - for Square
+S - for Star
+When generating the ith training example, your program should randomly choose the symbol to write to the image file. Before writing the symbol, it should apply various transformations to it, so that every time a symbol is drawn, it is somewhat different than the last. The kinds of transformations you should randomly apply to varying degrees are: Variations in position of the symbol, variations in the orientation of the symbol, variations in the size of the symbol, variations in the thickness of the strokes in the symbol, variations in the size and number of stray marks such as ellipsoids drawn in the image. The control of the amount of these kinds of variations should be pulled out into tweakable constants at the top of the zener_generator.py file.
+
+
+2.An SVM model training program. Your submitted trainer will be tested from the command line with a line using the format:
+python sk_train.py epsilon max_updates class_letter model_file_name train_folder_name 
+The following is an example concrete invocation of your program:
+python sk_train.py .01 30000 P plus_model.txt data
+If there are no files in train_folder_name folder with zener_generator.py output format file_names, then your program should stop and output NO DATA. Otherwise, your program use the files in train_folder_name and train an SVM using the kernel variant of the S-K algorithm taught in class. The training should stop after either the model has converged to within the value of epsilon or if more than max_updates adaptation steps have been done. The SVM should be trained to determine if an input image is of the class given by the class_letter. These class letters, O, P, W, Q, S, are the same as used by zener_generator.py. The kernel used in training should be a degree 4 polynomial kernel. This is what Cortes and Vapnik used. The choice of λ for the scaling in the scaled convex hull should satisfy the inequality from the slides so that the classes are separable. The output of your program should be a file consisting of a serialization of the class trained for (one of O, P, W, Q, S), the centroids of the positive and negative training data, the value λ computed, together with the final weights found. Each weight should be an ordered pair (i,α) where i is the index of a support vector (an image in the training set), where α is a float. You don't have to output any weights where α is 0. Notice from the file name of the image i one can determine if the example was in the trained for class or not. Then from the centroids and lambda one can compute x⃗ ′i.
+
+
+3.An SVM model testing program. Your submitted testing program will be graded by running from the command line a line using the format:
+python svm_model_tester.py model_file_name train_folder_name test_folder_name 
+The following is an example concrete invocation of your program:
+python svm_model_tester.py plus_model.txt data test
+If there are no files in train_folder_name folder with zener_generator.py output format file_names, then your program should stop and output NO TRAINING DATA. If there are no files in test_folder_name folder with zener_generator.py output format file_names, then your program should stop and output NO TEST DATA. If there is no correctly formatted model_file_name it should output appropriately either CAN'T FIND MODEL FILE or MODEL FILE IS NOT OF THE CORRECT FORMAT. Otherwise, your program should loop through the images in test_folder_name. For each image, it should compute what the SVM model would output (1 - in class/ 0- not in class) and compare that to the class given by the image file name. It should then output a line in the format:
+TRIAL# Correct/False Positive/False Negative\n
+depending on the situation for that image. Here are some example output lines:
+1 Correct
+2 Correct
+3 False Positive
+4 Correct
+5 False Negative
+...
+After outputting these lines for each image in the folder, your program should output a line for the fraction of correct test items, the fraction of false positives, and the fraction of false negative. For example, this might look like:
+Fraction Correct: .96
+Fraction False Positive: .3
+Fraction False Negative: .1
+
+
+4.Experiments and Write-up. I would like you to conduct four small experiments and write them up in a file Hw2.pdf which you include in your Hw2.zip file. You should keep your testing and training sets separate. Your test set can be relative small, say 1000 items. In one experiment I want you to vary just the amount of data trained on from say 1000, 5000, 10000, 15000, 20000, while training only for Plus, and fixing everything else. What is the effect of the training set size on accuracy of the trained model? The second experiment should compare for the same amount of training data how accurate an SVM for O, P, W, Q, S will be. Which symbols are the easiest/hardest to recognize? Why? The third experiment should try to vary the tweakable parameters at the top of zener_generator.py and see the effect of increasing distortion on the training. The last experiment should vary ε and see the effect of this on the accuracy of the trained models.
